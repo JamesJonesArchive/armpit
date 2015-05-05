@@ -1,0 +1,8 @@
+/altGEMS_accounts.json
+/altGEMS_roles.json
+/altGEMS_accounts_roles.json
+vendor/
+.idea/
+nbproject/
+*.iml
+target/

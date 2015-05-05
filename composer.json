@@ -1,0 +1,31 @@
+{
+    "name": "usf-it/armimport",
+    "description": "Description of project armimport.",
+    "authors": [
+        {
+            "name": "James Jones",
+            "email": "james@mail.usf.edu"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        { 
+            "type":"vcs",
+            "url":"https://github.com/USF-IT/usf-idm-database.git"
+        },        
+        {
+            "type": "vcs",
+            "url": "https://github.com/jamjon3/armapi.git"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "usf-it/armapi": "dev-master"
+    },
+    "autoload": {
+        "psr-4" : {
+            "USF\\IdM\\" : "src/"
+        }
+    }
+}
