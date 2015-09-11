@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f5e0e6416992b87d4710e356e3a4a213",
+    "hash": "a38a01f3ad72beaf1947e6b0c263b94e",
     "packages": [
         {
             "name": "caseyamcl/configula",
@@ -1018,16 +1018,16 @@
         },
         {
             "name": "usf-it/armapi",
-            "version": "dev-feature/schemarework",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jamjon3/armapi.git",
-                "reference": "8f322dbff6940631d76c5c82ae2b9a24173d3b73"
+                "reference": "71d42fafca9837e1d1755fde344933559ffc5875"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jamjon3/armapi/zipball/8f322dbff6940631d76c5c82ae2b9a24173d3b73",
-                "reference": "8f322dbff6940631d76c5c82ae2b9a24173d3b73",
+                "url": "https://api.github.com/repos/jamjon3/armapi/zipball/71d42fafca9837e1d1755fde344933559ffc5875",
+                "reference": "71d42fafca9837e1d1755fde344933559ffc5875",
                 "shasum": ""
             },
             "require": {
@@ -1059,10 +1059,10 @@
             ],
             "description": "Native service methods supporting the ARM project.",
             "support": {
-                "source": "https://github.com/jamjon3/armapi/tree/feature/schemarework",
+                "source": "https://github.com/jamjon3/armapi/tree/master",
                 "issues": "https://github.com/jamjon3/armapi/issues"
             },
-            "time": "2015-05-14 19:26:14"
+            "time": "2015-05-18 20:00:19"
         },
         {
             "name": "usf-it/usf-idm-common",

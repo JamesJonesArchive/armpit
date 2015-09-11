@@ -16,7 +16,7 @@
         },        
         {
             "type": "vcs",
-            "url": "https://github.com/jamjon3/armapi.git"
+            "url": "https://github.com/USF-IT/armapi.git"
         }
     ],
     "require": {

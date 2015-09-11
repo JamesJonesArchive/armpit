@@ -15,15 +15,17 @@ try {
     require_once $autoload;
     $usfARMapi = new UsfARMapi();
     $usfParser = new \USF\IdM\UsfParser();
-    // echo $usfParser->parseRoles('altGEMS_roles.json');
-    // echo $usfParser->parseAccounts('altGEMS_accounts.json');
-    echo $usfParser->parseAccountRoles('altGEMS_accounts_roles.json');
-    // print_r($usfARMapi->getAccountsForIdentity("U96280669"));
-    // print_r($usfARMapi->getAccountsByType("GEMS"));
-    // print_r($usfARMapi->getAccountByTypeAndIdentifier("GEMS", "00000052959"));
-    // print_r($usfARMapi->getRolesForAccountByTypeAndIdentifier("GEMS","00000052959"));
-    // print_r($usfARMapi->getAccountsByTypeAndIdentity("GEMS", "U96280669"));
-    // print_r($usfARMapi->getAllRolesByType("GEMS"));
+    switch($argv[1]) {
+        case "roles":
+            $usfParser->parseRoles($argv[2]);
+            break;
+        case "accounts":
+            $usfParser->parseAccounts($argv[2]);
+            break;
+        case "mapping":
+            $usfParser->parseAccountRoles($argv[2]);
+            break;
+    }
 } catch (Exception $ex) {
 
 }

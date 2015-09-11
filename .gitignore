@@ -6,3 +6,6 @@ vendor/
 nbproject/
 *.iml
 target/
+/GEMS_roles.json
+/GEMS_accounts_roles.json
+/GEMS_accounts.json
