@@ -25,7 +25,7 @@ class UsfParser {
         while (!feof($handle)) {
             $line = fgets($handle);
             if (trim($line) == '') {
-                if ($currentBlock) {
+                if (!empty($currentBlock)) {
                     $role = (array) \json_decode(\implode("\n", $currentBlock));
                     print_r($role);
                     $currentrole = $usfARMapi->getRoleByTypeAndName($role['account_type'],$role['name']);
@@ -49,7 +49,7 @@ class UsfParser {
         }
         fclose($handle);
         //if is anything left
-        if ($currentBlock) {
+        if (!empty($currentBlock)) {
             $role = (array) \json_decode(\implode("\n", $currentBlock),true);
             print_r($role);
             $currentrole = $usfARMapi->getRoleByTypeAndName($role['account_type'],$role['name']);
@@ -76,7 +76,7 @@ class UsfParser {
         while (!feof($handle)) {
             $line = fgets($handle);
             if (trim($line) == '') {
-                if ($currentBlock) {
+                if (!empty($currentBlock)) {
                     $account = (array) \json_decode(\implode("\n", $currentBlock),true);
                     print_r($account);
                     $currentaccount = $usfARMapi->getAccountByTypeAndIdentifier($account['account_type'],$account['account_identifier']);
@@ -100,7 +100,7 @@ class UsfParser {
         }
         fclose($handle);
         //if is anything left
-        if ($currentBlock) {
+        if (!empty($currentBlock)) {
             $account = (array) \json_decode(\implode("\n", $currentBlock),true);
             print_r($account);
             $currentaccount = $usfARMapi->getAccountByTypeAndIdentifier($account['account_type'],$account['account_identifier']);
@@ -127,7 +127,7 @@ class UsfParser {
         while (!feof($handle)) {
             $line = fgets($handle);
             if (trim($line) == '') {
-                if ($currentBlock) {
+                if (!empty($currentBlock)) {
                     $accountroles = (array) \json_decode(\implode("\n", $currentBlock),true);
                     print_r($accountroles);
                     $currentaccount = $usfARMapi->getAccountByTypeAndIdentifier($accountroles['account_type'],$accountroles['account_identifier']);
@@ -152,7 +152,7 @@ class UsfParser {
         }
         fclose($handle);
         //if is anything left
-        if ($currentBlock) {
+        if (!empty($currentBlock)) {
             $accountroles = (array) \json_decode(\implode("\n", $currentBlock),true);
             print_r($accountroles);
             $currentaccount = $usfARMapi->getAccountByTypeAndIdentifier($accountroles['account_type'],$accountroles['account_identifier']);
