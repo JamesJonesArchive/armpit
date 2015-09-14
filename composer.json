@@ -12,7 +12,7 @@
     "repositories": [
         { 
             "type":"vcs",
-            "url":"https://github.com/jamjon3/usf-idm-database.git"
+            "url":"https://github.com/USF-IT/usf-idm-database.git"
         },        
         {
             "type": "vcs",
