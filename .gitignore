@@ -10,3 +10,4 @@ target/
 /GEMS_accounts_roles.json
 /GEMS_accounts.json
 composer.lock
+/dump/
