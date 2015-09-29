@@ -13,18 +13,11 @@ try {
         throw new \Exception('Composer dependencies not installed. Run `make install --directory app/api`');
     }
     require_once $autoload;
-    $usfARMapi = new UsfARMapi();
-    $usfParser = new \USF\IdM\UsfParser();
-    switch($argv[1]) {
-        case "roles":
-            $usfParser->parseRoles($argv[2]);
-            break;
-        case "accounts":
-            $usfParser->parseAccounts($argv[2]);
-            break;
-        case "mapping":
-            $usfParser->parseAccountRoles($argv[2]);
-            break;
+    $usfARMImportFileProcessor = new \USF\IdM\UsfARMImportFileProcessor();
+    if(in_array(strtolower(trim($argv[1])), ['roles','accounts','mapping'])) {
+        $usfARMImportFileProcessor->parseFileByType($argv[2], strtolower(trim($argv[1])));
+    } else {
+        exit("Invalid option for import type: {$argv[1]}");
     }
 } catch (Exception $ex) {
 
