@@ -23,6 +23,14 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
     public function parseFileByType($importfile,$importtype) {
         $handle = fopen($importfile, 'r');
         $currentBlock = [];
+        switch (strtolower(trim($importtype))) {
+            case "roles":
+                $this->buildRoleComparison();
+                break;
+            case "accounts":
+                $this->buildAccountComparison();
+                break;
+        }
         while (!feof($handle)) {
             $line = fgets($handle);
             if (\trim($line) === '') {                
@@ -72,6 +80,14 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
             } else {
                 exit("Import type invalid: $importtype");
             }
+        }
+        switch (strtolower(trim($importtype))) {
+            case "roles":
+                // run any deletes
+                break;
+            case "accounts":
+                // run any deletes
+                break;
         }
     }
 }
