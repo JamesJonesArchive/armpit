@@ -20,16 +20,22 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
      * @param type $importfile
      * @param type $importtype
      */
-    public function parseFileByType($importfile,$importtype) {
+    public function parseFileByType($importfile,$importtype,$track = false) {
         $handle = fopen($importfile, 'r');
         $currentBlock = [];
-        switch (strtolower(trim($importtype))) {
-            case "roles":
-                $this->buildRoleComparison();
-                break;
-            case "accounts":
-                $this->buildAccountComparison();
-                break;
+        if($track) {
+            switch (strtolower(trim($importtype))) {
+                case "roles":
+                    strtolower(trim($importtype))."\n";
+                    $this->buildRoleComparison();
+                    break;
+                case "accounts":
+                    $this->buildAccountComparison();
+                    break;
+                default:
+                    echo "NO MATCH ON ".strtolower(trim($importtype))."\n";
+                    break;
+            }            
         }
         while (!feof($handle)) {
             $line = fgets($handle);
@@ -41,11 +47,10 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                                 $role = (array) \json_decode(\implode("\n", $currentBlock),true);
                                 print_r($role);
                                 print_r($this->importRole($role));
+                                $resp = $this->importRole($role);
                                 break;
                             case "accounts":
-                                $account = (array) \json_decode(\implode("\n", $currentBlock),true);
-                                print_r($account);
-                                print_r($this->importAccount($account));
+                                $this->handleImportAccount((array) \json_decode(\implode("\n", $currentBlock),true),$track);
                                 break;
                             case "mapping":
                                 $accountroles = (array) \json_decode(\implode("\n", $currentBlock),true);
@@ -71,7 +76,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                         print_r($this->importRole((array) \json_decode(\implode("\n", $currentBlock))));
                         break;
                     case "accounts":
-                        print_r($this->importAccount((array) \json_decode(\implode("\n", $currentBlock))));
+                        $this->handleImportAccount((array) \json_decode(\implode("\n", $currentBlock),true),$track);
                         break;
                     case "mapping":
                         print_r($this->importAccountRoles((array) \json_decode(\implode("\n", $currentBlock))));
@@ -81,13 +86,52 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                 exit("Import type invalid: $importtype");
             }
         }
-        switch (strtolower(trim($importtype))) {
-            case "roles":
-                // run any deletes
-                break;
-            case "accounts":
-                // run any deletes
-                break;
+        if($track) {
+            switch (strtolower(trim($importtype))) {
+                case "roles":
+                    // run any deletes
+                    break;
+                case "accounts":
+                    // run any deletes
+                    foreach ($this->getTrackingHrefList()->getData()['hrefs'] as $href) {
+                        $deleteresp = $this->removeAccount($href);
+                        if(!$deleteresp->isSuccess()) {
+                            $this->logImportErrors('accounts',[ 'href' => $href ],$deleteresp->getData());
+                        } else {
+                            $this->logImportErrors('accounts',$deleteresp->getData()['account'],$deleteresp->getData());
+                            $trackingresp = $this->removeAccountFromTracking($href);
+                            if(!$trackingresp->isSuccess()) {
+                                $this->logImportErrors('accounts',[ 'href' => $href ],$trackingresp->getData());
+                            }
+                        }
+                    }
+                    $this->getARMtracking()->drop();
+                    break;
+            }
+        }
+    }
+    /**
+     * 
+     * @param array $account
+     */
+    public function handleImportAccount($account,$track = false) {
+        print_r($account);
+        $resp = $this->importAccount($account);
+        if($resp->isSuccess()) {
+            // $resp->getData()['href'];
+            print_r($resp->getData());
+            if($track) {
+                // We don't care if this is successful as it may be new and not exist
+                $trackingresp = $this->removeAccountFromTracking($resp->getData()['href']);                                    
+            }
+        } elseif ($track) {
+            $this->logImportErrors('accounts',$account,$resp->getData());
+            // Remove url from tracking since it failed but "exists" so shouldn't be deleted
+            $href = "/accounts/{$account['account_type']}/{$account['account_identifier']}";
+            $trackingresp = $this->removeAccountFromTracking($href);
+            if(!$trackingresp->isSuccess()) {
+                $this->logImportErrors('accounts',$account,$trackingresp->getData());
+            }
         }
     }
 }
