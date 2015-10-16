@@ -44,10 +44,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                     if(in_array(strtolower(trim($importtype)), ['roles','accounts','mapping'])) {
                         switch (strtolower(trim($importtype))) {
                             case "roles":
-                                $role = (array) \json_decode(\implode("\n", $currentBlock),true);
-                                print_r($role);
-                                print_r($this->importRole($role));
-                                $resp = $this->importRole($role);
+                                $this->handleImportRole((array) \json_decode(\implode("\n", $currentBlock),true),$track);
                                 break;
                             case "accounts":
                                 $this->handleImportAccount((array) \json_decode(\implode("\n", $currentBlock),true),$track);
@@ -132,6 +129,30 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
             $trackingresp = $this->removeAccountFromTracking($href);
             if(!$trackingresp->isSuccess()) {
                 $this->logImportErrors('accounts',$account,$trackingresp->getData());
+            }
+        }
+    }
+    /**
+     * 
+     * @param array $role
+     */
+    public function handleImportRole($role,$track = false) {
+        print_r($role);
+        $resp = $this->importRole($role);
+        if($resp->isSuccess()) {
+            // $resp->getData()['href'];
+            print_r($resp->getData());
+            if($track) {
+                // We don't care if this is successful as it may be new and not exist
+                $trackingresp = $this->removeAccountFromTracking($resp->getData()['href']);                                    
+            }
+        } elseif ($track) {
+            $this->logImportErrors('roles',$role,$resp->getData());
+            // Remove url from tracking since it failed but "exists" so shouldn't be deleted
+            $href = \USF\IdM\UsfARMapi::formatRoleName("/roles/{$role['account_type']}/{$role['name']}");
+            $trackingresp = $this->removeAccountFromTracking($href);
+            if(!$trackingresp->isSuccess()) {
+                $this->logImportErrors('roles',$role,$trackingresp->getData());
             }
         }
     }
