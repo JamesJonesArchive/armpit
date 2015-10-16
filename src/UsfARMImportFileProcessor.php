@@ -20,7 +20,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
      * @param type $importfile
      * @param type $importtype
      */
-    public function parseFileByType($importfile,$importtype,$track = false) {
+    public function parseFileByType($importfile,$importtype,$track = false,$type = null) {
         $handle = fopen($importfile, 'r');
         $currentBlock = [];
         if($track) {
@@ -109,6 +109,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                     break;
             }
         }
+        return "IMPORT COMPLETED!";
     }
     /**
      * 
