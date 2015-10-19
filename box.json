@@ -15,7 +15,7 @@
         }
     ],
     "git-version": "package_version",
-    "main": "bin/cliph",
-    "output": "cliph.phar",
+    "main": "app/console",
+    "output": "dist/appimport.phar",
     "stub": true
 }
