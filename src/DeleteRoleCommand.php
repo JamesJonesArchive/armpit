@@ -28,11 +28,17 @@ class DeleteRoleCommand extends Command {
         $this->setName("delete:role")
             ->setDescription("Removes a role with the given href")
             ->addArgument('href',InputArgument::REQUIRED,'What is the role href?')
-            ->addOption('track',null,InputOption::VALUE_NONE,'If set, accounts will be tracked against existing to remove missing ones')
-            ->addOption('type',null,InputOption::VALUE_REQUIRED,'What is the system type (used in tracking)?',false)
             ->setHelp("Usage: <info>php console.php delete:role <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
         $href = $input->getArgument('href');
+        $resp = $this->usfARMapi->removeRole($href);
+        if($resp->isSuccess()) {
+            $output->writeln("Successfully deleted {$href}: ".json_encode($resp->getData()['role'], JSON_PRETTY_PRINT));
+        } elseif($resp->isError()) {
+            $output->writeln("Error deleting {$href}: ".$resp->getData()['description']);
+        } elseif($resp->isFail()) {
+            $output->writeln("Failure deleting {$href}: ".$resp->getData()['description']);
+        }
     }
 }

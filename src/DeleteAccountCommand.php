@@ -28,11 +28,17 @@ class DeleteAccountCommand extends Command {
         $this->setName("delete:account")
             ->setDescription("Removes an account with the given href")
             ->addArgument('href',InputArgument::REQUIRED,'What is the account href?')
-            ->addOption('track',null,InputOption::VALUE_NONE,'If set, accounts will be tracked against existing to remove missing ones')
-            ->addOption('type',null,InputOption::VALUE_REQUIRED,'What is the system type (used in tracking)?',false)
             ->setHelp("Usage: <info>php console.php delete:account <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
         $href = $input->getArgument('href');
+        $resp = $this->usfARMapi->removeAccount($href);
+        if($resp->isSuccess()) {
+            $output->writeln("Successfully deleted {$href}: ".json_encode($resp->getData()['account'], JSON_PRETTY_PRINT));
+        } elseif($resp->isError()) {
+            $output->writeln("Error deleting {$href}: ".$resp->getData()['description']);
+        } elseif($resp->isFail()) {
+            $output->writeln("Failure deleting {$href}: ".$resp->getData()['description']);
+        }
     }
 }
