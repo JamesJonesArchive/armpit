@@ -67,10 +67,7 @@ class DumpArmCommand extends Command {
         $this->delete_files($tempfile);
         $results[] = "Temp directory removed";
         $results[] = $zipPath." created";
-        // mongodump --db arm --collection roles
-        // $command = "mongodump --db " . $this->database . " --out " . $this->current_dump_path;
-        $output->writeln($results);
-        
+        $output->writeln($results);        
     }
     /**
      * php delete function that deals with directories recursively

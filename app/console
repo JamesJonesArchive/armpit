@@ -17,6 +17,7 @@ use USF\IdM\ImportRolesCommand;
 use USF\IdM\DeleteAccountCommand;
 use USF\IdM\DeleteRoleCommand;
 use USF\IdM\DumpArmCommand;
+use USF\IdM\RestoreArmCommand;
 
 $app = new Application();
 $app->add(new ImportAccountsCommand());
@@ -24,5 +25,6 @@ $app->add(new ImportRolesCommand());
 $app->add(new DeleteAccountCommand());
 $app->add(new DeleteRoleCommand());
 $app->add(new DumpArmCommand());
+$app->add(new RestoreArmCommand());
 $app->run();
 ?>
