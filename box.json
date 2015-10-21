@@ -16,6 +16,6 @@
     ],
     "git-version": "package_version",
     "main": "app/console",
-    "output": "dist/armimport.phar",
+    "output": "bin/armimport.phar",
     "stub": true
 }

@@ -16,11 +16,13 @@ use USF\IdM\ImportAccountsCommand;
 use USF\IdM\ImportRolesCommand;
 use USF\IdM\DeleteAccountCommand;
 use USF\IdM\DeleteRoleCommand;
+use USF\IdM\DumpArmCommand;
 
 $app = new Application();
 $app->add(new ImportAccountsCommand());
 $app->add(new ImportRolesCommand());
 $app->add(new DeleteAccountCommand());
 $app->add(new DeleteRoleCommand());
+$app->add(new DumpArmCommand());
 $app->run();
 ?>
