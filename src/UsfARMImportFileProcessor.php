@@ -50,9 +50,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                                 $this->handleImportAccount((array) \json_decode(\implode("\n", $currentBlock),true),$track);
                                 break;
                             case "mapping":
-                                $accountroles = (array) \json_decode(\implode("\n", $currentBlock),true);
-                                print_r($accountroles);
-                                print_r($this->importAccountRoles($accountroles));
+                                print_r($this->importAccountRoles((array) \json_decode(\implode("\n", $currentBlock),true)));
                                 break;
                         }                        
                     } else {
@@ -76,7 +74,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                         $this->handleImportAccount((array) \json_decode(\implode("\n", $currentBlock),true),$track);
                         break;
                     case "mapping":
-                        print_r($this->importAccountRoles((array) \json_decode(\implode("\n", $currentBlock))));
+                        print_r($this->importAccountRoles((array) \json_decode(\implode("\n", $currentBlock),true)));
                         break;
                 }                        
             } else {
