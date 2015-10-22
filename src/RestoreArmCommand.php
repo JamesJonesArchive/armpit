@@ -21,6 +21,8 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * @author james
  */
 class RestoreArmCommand extends Command {
+    use ImportUtilities;
+    
     protected function configure() {
         $this->setName("backup:import")
             ->setDescription("Restores a zipped mongo dump.")
@@ -46,23 +48,5 @@ class RestoreArmCommand extends Command {
         $results[] = shell_exec($restore_cmd);
         $this->delete_files($tempfile);
         $output->writeln($results);
-    }
-    /**
-     * php delete function that deals with directories recursively
-     */
-    private function delete_files($target) {
-        if (is_dir($target)) {
-            $files = \glob($target . '*', GLOB_MARK); //GLOB_MARK adds a slash to directories returned
-
-            foreach ($files as $file) {
-                $this->delete_files($file);
-            }
-            if(\file_exists($target)) { 
-                \rmdir($target);
-            }
-        } elseif (is_file($target)) {
-            \unlink($target);
-        }
-    }
-    
+    }    
 }

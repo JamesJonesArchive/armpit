@@ -21,7 +21,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  */
 class DeleteRoleCommand extends Command {
     public function __construct() {
-        $this->usfARMapi = new \USF\IdM\UsfARMapi();
+        $this->usfARMImportFileProcessor = new \USF\IdM\UsfARMImportFileProcessor();
         parent::__construct();
     }
     protected function configure() {
@@ -32,13 +32,6 @@ class DeleteRoleCommand extends Command {
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
         $href = $input->getArgument('href');
-        $resp = $this->usfARMapi->removeRole($href);
-        if($resp->isSuccess()) {
-            $output->writeln("Successfully deleted {$href}: ".json_encode($resp->getData()['role'], JSON_PRETTY_PRINT));
-        } elseif($resp->isError()) {
-            $output->writeln("Error deleting {$href}: ".$resp->getData()['description']);
-        } elseif($resp->isFail()) {
-            $output->writeln("Failure deleting {$href}: ".$resp->getData()['description']);
-        }
+        $output->writeln($this->usfARMImportFileProcessor->removeRole($href)->encode());
     }
 }

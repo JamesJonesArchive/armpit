@@ -20,6 +20,8 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * @author james
  */
 class DumpArmCommand extends Command {
+    use ImportUtilities;
+    
     protected function configure() {
         $this->setName("backup:export")
             ->setDescription("Exports ARM mongo data to zipped dump")
@@ -68,23 +70,6 @@ class DumpArmCommand extends Command {
         $results[] = "Temp directory removed";
         $results[] = $zipPath." created";
         $output->writeln($results);        
-    }
-    /**
-     * php delete function that deals with directories recursively
-     */
-    private function delete_files($target) {
-        if (is_dir($target)) {
-            $files = \glob($target . '*', GLOB_MARK); //GLOB_MARK adds a slash to directories returned
-
-            foreach ($files as $file) {
-                $this->delete_files($file);
-            }
-            if(\file_exists($target)) { 
-                \rmdir($target);
-            }
-        } elseif (is_file($target)) {
-            \unlink($target);
-        }
     }
 
 }

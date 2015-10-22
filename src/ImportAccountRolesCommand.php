@@ -27,13 +27,15 @@ class ImportAccountRolesCommand extends Command {
     protected function configure() {
         $this->setName("import:mapping")
             ->setDescription("Imports account roles from line feed separated json account objects.")
-            ->addArgument('fileName',InputArgument::REQUIRED,'What is the accounts filename?')
-            ->addOption('track',null,InputOption::VALUE_NONE,'If set, accounts will be tracked against existing to remove missing ones')
-            ->addOption('type',null,InputOption::VALUE_REQUIRED,'What is the system type (used in tracking)?',false)
+            ->addArgument('fileName',InputArgument::OPTIONAL,'What is the accounts filename?')
+            ->addOption('in',null,InputOption::VALUE_NONE,'Provide STDIN')
             ->setHelp("Usage: <info>php console.php import:accounts <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
-        $filePath = $input->getArgument('fileName');
-        $output->writeln($this->usfARMImportFileProcessor->parseFileByType($filePath,'mapping'));
+        if($filePath = $input->getArgument('fileName')) {
+            $output->writeln($this->usfARMImportFileProcessor->parseFileByType($filePath,'mapping'));
+        } else {
+            $output->writeln($this->usfARMImportFileProcessor->importAccountRoles(\json_decode(\file_get_contents("php://stdin"),true))->encode());
+        }
     }
 }
