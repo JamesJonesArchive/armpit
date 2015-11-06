@@ -17,6 +17,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/USF-IT/armapi.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/jamjon3/VisorClientAPI.git"
         }
     ],
     "require": {
