@@ -21,19 +21,33 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
      * @param type $importtype
      */
     public function parseFileByType($importfile,$importtype) {
-        $handle = fopen($importfile, 'r');
+        $importtype = \strtolower(\trim($importtype));
+        $handle = \fopen($importfile, 'r');
         $currentBlock = [];
+        if($importtype == 'accounts') {
+            $this->buildAccountComparison();
+        } elseif($importtype == "roles") {
+            $this->buildRoleComparison();
+        }
         while (!feof($handle)) {
             $line = fgets($handle);
             if (\trim($line) === '') {                
                 if (!empty($currentBlock)) {
-                    if(in_array(strtolower(trim($importtype)), ['roles','accounts','mapping'])) {
-                        switch (strtolower(trim($importtype))) {
+                    if(in_array($importtype, ['roles','accounts','mapping'])) {
+                        switch ($importtype) {
                             case "roles":
-                                echo $this->importRole(\json_decode(\implode("\n", $currentBlock),true))->encode()."\n";
+                                $resp = $this->importRole(\json_decode(\implode("\n", $currentBlock),true));
+                                if($resp->isSuccess()) {
+                                    $this->removeHrefFromTracking($resp->getData()['href']);
+                                }
+                                echo $resp->encode()."\n";
                                 break;
                             case "accounts":
-                                echo $this->importAccount(\json_decode(\implode("\n", $currentBlock),true))->encode()."\n";
+                                $resp = $this->importAccount(\json_decode(\implode("\n", $currentBlock),true));
+                                if($resp->isSuccess()) {
+                                    $this->removeHrefFromTracking($resp->getData()['href']);
+                                }
+                                echo $resp->encode()."\n";
                                 break;
                             case "mapping":
                                 echo $this->importAccountRoles(\json_decode(\implode("\n", $currentBlock),true))->encode()."\n";
@@ -54,10 +68,18 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
             if(in_array(strtolower(trim($importtype)), ['roles','accounts','mapping'])) {
                 switch (strtolower(trim($importtype))) {
                     case "roles":
-                        echo $this->importRole(\json_decode(\implode("\n", $currentBlock),true))->encode()."\n";
+                        $resp = $this->importRole(\json_decode(\implode("\n", $currentBlock),true));
+                        if($resp->isSuccess()) {
+                            $this->removeHrefFromTracking($resp->getData()['href']);
+                        }
+                        echo $resp->encode()."\n";
                         break;
                     case "accounts":
-                        echo $this->importAccount(\json_decode(\implode("\n", $currentBlock),true))->encode()."\n";
+                        $resp = $this->importAccount(\json_decode(\implode("\n", $currentBlock),true));
+                        if($resp->isSuccess()) {
+                            $this->removeHrefFromTracking($resp->getData()['href']);
+                        }
+                        echo $resp->encode()."\n";
                         break;
                     case "mapping":
                         echo $this->importAccountRoles(\json_decode(\implode("\n", $currentBlock),true))->encode()."\n";
@@ -65,6 +87,19 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                 }                        
             } else {
                 exit("Import type invalid: $importtype");
+            }
+        }
+        if($importtype == 'accounts') {
+            foreach($this->getTrackingHrefList()->getData()['hrefs'] as $href) {
+                $resp = $this->removeAccount($href);
+                echo $resp->encode()."\n";
+                $this->removeHrefFromTracking($href);
+            }
+        } elseif($importtype == "roles") {
+            foreach($this->getTrackingHrefList()->getData()['hrefs'] as $href) {
+                $resp = $this->removeRole($href);
+                echo $resp->encode()."\n";
+                $this->removeHrefFromTracking($href);
             }
         }
         return "IMPORT COMPLETED!";
