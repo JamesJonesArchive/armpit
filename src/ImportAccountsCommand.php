@@ -33,7 +33,11 @@ class ImportAccountsCommand extends Command {
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
         if($filePath = $input->getArgument('fileName')) {
-            $output->writeln($this->usfARMImportFileProcessor->parseFileByType($filePath,'accounts'));
+            if (\file_exists($filePath)) {
+                $output->writeln($this->usfARMImportFileProcessor->parseFileByType($filePath,'accounts'));
+            } else {
+                $output->writeln("ERROR: File does not exist!");
+            }
         } else {
             $output->writeln($this->usfARMImportFileProcessor->importAccount(\json_decode(\file_get_contents("php://stdin"),true))->encode());
         }
