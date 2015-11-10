@@ -7,6 +7,9 @@ set_time_limit(0);
 /* Optional. It’s better to do it in the php.ini file */
 date_default_timezone_set('America/Los_Angeles'); 
 
+/* Use 128M memory it may need */
+ini_set('memory_limit', '128M');
+
 // include the composer autoloader
 require_once __DIR__ . '/../vendor/autoload.php'; 
 
