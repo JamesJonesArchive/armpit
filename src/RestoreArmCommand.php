@@ -27,8 +27,6 @@ class RestoreArmCommand extends Command {
         $this->setName("backup:import")
             ->setDescription("Restores a zipped mongo dump.")
             ->addArgument('fileName',InputArgument::REQUIRED,'What is the accounts filename?')
-            ->addOption('track',null,InputOption::VALUE_NONE,'If set, accounts will be tracked against existing to remove missing ones')
-            ->addOption('type',null,InputOption::VALUE_REQUIRED,'What is the system type (used in tracking)?',false)
             ->setHelp("Usage: <info>php console.php import:accounts <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
