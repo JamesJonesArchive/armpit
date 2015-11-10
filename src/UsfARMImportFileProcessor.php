@@ -20,14 +20,14 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
      * @param type $importfile
      * @param type $importtype
      */
-    public function parseFileByType($importfile,$importtype) {
+    public function parseFileByType($importfile,$importtype,$type) {
         $importtype = \strtolower(\trim($importtype));
         $handle = \fopen($importfile, 'r');
         $currentBlock = [];
         if($importtype == 'accounts') {
-            $this->buildAccountComparison();
+            $this->buildAccountComparison($type);
         } elseif($importtype == "roles") {
-            $this->buildRoleComparison();
+            $this->buildRoleComparison($type);
         }
         while (!feof($handle)) {
             $line = fgets($handle);
@@ -38,7 +38,8 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                             case "roles":
                                 $resp = $this->importRole(\json_decode(\implode("\n", $currentBlock),true));
                                 if($resp->isSuccess()) {
-                                    $this->removeHrefFromTracking($resp->getData()['href']);
+                                    echo $resp->encode()."\n";
+                                    $this->removeHrefFromTracking($resp->getData()['role_data']['href']);
                                 }
                                 echo $resp->encode()."\n";
                                 break;
@@ -70,7 +71,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                     case "roles":
                         $resp = $this->importRole(\json_decode(\implode("\n", $currentBlock),true));
                         if($resp->isSuccess()) {
-                            $this->removeHrefFromTracking($resp->getData()['href']);
+                            $this->removeHrefFromTracking($resp->getData()['role_data']['href']);
                         }
                         echo $resp->encode()."\n";
                         break;

@@ -28,13 +28,14 @@ class ImportRolesCommand extends Command {
         $this->setName("import:roles")
             ->setDescription("Imports roles from line feed separated json roles objects.")
             ->addArgument('fileName',InputArgument::OPTIONAL,'What is the roles filename?')
+            ->addOption('type',null,InputOption::VALUE_REQUIRED,'Provide the system type')
             ->addOption('in',null,InputOption::VALUE_NONE,'Provide STDIN')
             ->setHelp("Usage: <info>php console.php import:roles <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
         if($filePath = $input->getArgument('fileName')) {
             if (\file_exists($filePath)) {
-                $output->writeln($this->usfARMImportFileProcessor->parseFileByType($filePath,'roles'));
+                $output->writeln($this->usfARMImportFileProcessor->parseFileByType($filePath,'roles',$input->getOption('type')));
             } else {
                 $output->writeln("ERROR: File does not exist!");
             }

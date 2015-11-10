@@ -28,13 +28,14 @@ class ImportAccountsCommand extends Command {
         $this->setName("import:accounts")
             ->setDescription("Imports accounts from line feed separated json account objects.")
             ->addArgument('fileName',InputArgument::OPTIONAL,'What is the accounts filename?')
+            ->addOption('type',null,InputOption::VALUE_REQUIRED,'Provide the system type')
             ->addOption('in',null,InputOption::VALUE_NONE,'Provide STDIN')
             ->setHelp("Usage: <info>php console.php import:accounts <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
         if($filePath = $input->getArgument('fileName')) {
             if (\file_exists($filePath)) {
-                $output->writeln($this->usfARMImportFileProcessor->parseFileByType($filePath,'accounts'));
+                $output->writeln($this->usfARMImportFileProcessor->parseFileByType($filePath,'accounts',$input->getOption('type')));
             } else {
                 $output->writeln("ERROR: File does not exist!");
             }
