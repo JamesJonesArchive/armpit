@@ -12,3 +12,4 @@ target/
 composer.lock
 /dump/
 arm_backup.zip
+/bin/

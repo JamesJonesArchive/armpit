@@ -7,6 +7,14 @@
             "email": "james@mail.usf.edu"
         }
     ],
+    "type": "project",
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/USF-IT/armimport",
+    "support": {
+        "email": "james@mail.usf.edu",
+        "source": "https://github.com/USF-IT/armimport",
+        "issues": "https://github.com/USF-IT/armimport/issues"
+    },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "repositories": [
@@ -17,11 +25,18 @@
         {
             "type": "vcs",
             "url": "https://github.com/USF-IT/armapi.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/jamjon3/VisorClientAPI.git"
         }
     ],
     "require": {
         "php": ">=5.4",
         "usf-it/armapi": "dev-develop"
+    },
+    "require-dev": {
+        "kherge/box": "~2.5"
     },
     "autoload": {
         "psr-4" : {
