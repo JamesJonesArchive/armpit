@@ -57,4 +57,23 @@ Delete a role by href
 ```
 armimport.phar delete:role <href>
 ```
+## set review
+Set a review on accounts by a system type
+```
+armimport.phar review:accounts --type <type>
+```
 
+Set a review on an identity by a system type
+```
+armimport.phar review:accounts --type <type> --usfid <usfid>
+```
+
+Set a review for all accounts of an identity
+```
+armimport.phar review:accounts --usfid <usfid>
+```
+
+Set a review on an account by a system type and identifier
+```
+armimport.phar review:accounts --type <type> --identifier <identifier>
+```
