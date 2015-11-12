@@ -15,7 +15,6 @@ There are 3 option for importing:
 ## roles
 Imports the roles
 ```
-php index roles <filename.json>
 armimport.phar import:roles --type <SYSTEM_TYPE> <filename.json>
 ```
 
