@@ -34,7 +34,9 @@ class ImportAccountRolesCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         if($filePath = $input->getArgument('fileName')) {
             if (\file_exists($filePath)) {
+                $output->writeln("Importing account roles: Started at ".date("F j, Y, g:i a"));
                 $output->writeln($this->usfARMImportFileProcessor->parseFileByType($filePath,'mapping',null));
+                $output->writeln("Importing account roles: Ended at ".date("F j, Y, g:i a"));
             } else {
                 $output->writeln("ERROR: File does not exist!");
             }

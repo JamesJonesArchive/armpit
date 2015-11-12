@@ -35,7 +35,9 @@ class ImportAccountsCommand extends Command {
     protected function execute(InputInterface $input, OutputInterface $output) {
         if($filePath = $input->getArgument('fileName')) {
             if (\file_exists($filePath)) {
+                $output->writeln("Importing accounts from ".$input->getOption('type').": Started at ".date("F j, Y, g:i a"));
                 $output->writeln($this->usfARMImportFileProcessor->parseFileByType($filePath,'accounts',$input->getOption('type')));
+                $output->writeln("Importing accounts from ".$input->getOption('type').": Ended at ".date("F j, Y, g:i a"));
             } else {
                 $output->writeln("ERROR: File does not exist!");
             }
