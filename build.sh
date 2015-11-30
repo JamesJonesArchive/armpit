@@ -1,12 +1,12 @@
 #!/bin/bash
 rm -rf bin
 echo "**************************************************************************"
-echo "* Updating composer for the armimport package                            *"
+echo "* Updating composer for the armpit package                               *"
 echo "**************************************************************************"
 composer update
 mkdir -p bin
 echo "**************************************************************************"
-echo "* Building the bin/armimport.phar file                                   *"
+echo "* Building the bin/armpit.phar file                                      *"
 echo "**************************************************************************"
 vendor/bin/box build
 echo "**************************************************************************"

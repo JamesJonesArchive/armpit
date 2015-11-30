@@ -37,6 +37,7 @@ class DumpArmCommand extends Command {
         $dump_cmd = "mongodump --db arm --collection ";
         $results[] = shell_exec($dump_cmd."roles --out ".$tempfile."/dump");
         $results[] = shell_exec($dump_cmd."accounts --out ".$tempfile."/dump");
+        $results[] = shell_exec($dump_cmd."audits --out ".$tempfile."/dump");
         // Initialize archive object
         $zip = new \ZipArchive;        
         if($input->getOption('out')) {
