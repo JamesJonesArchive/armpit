@@ -39,7 +39,11 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                                 $resp = $this->importRole(\json_decode(\implode("\n", $currentBlock),true));
                                 if($resp->isSuccess()) {
                                     echo $resp->encode()."\n";
-                                    $this->removeHrefFromTracking($resp->getData()['role_data']['href']);
+                                    if(\array_key_exists('role_data', $resp->getData())) {
+                                        $this->removeHrefFromTracking($resp->getData()['role_data']['href']);
+                                    } else {
+                                        $this->removeHrefFromTracking($resp->getData()['href']);
+                                    }
                                 }
                                 echo $resp->encode()."\n";
                                 break;

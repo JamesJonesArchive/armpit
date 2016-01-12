@@ -33,7 +33,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "usf-it/armapi": "dev-develop"
+        "usf-it/armapi": "1.0.3"
     },
     "require-dev": {
         "kherge/box": "~2.5"
