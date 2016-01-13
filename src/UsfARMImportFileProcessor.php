@@ -36,6 +36,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
                     if(in_array($importtype, ['roles','accounts','mapping'])) {
                         switch ($importtype) {
                             case "roles":
+                                echo "Start::".\implode("", $currentBlock)."::Stop\n";
                                 $resp = $this->importRole(\json_decode(\implode("\n", $currentBlock),true));
                                 if($resp->isSuccess()) {
                                     echo $resp->encode()."\n";
@@ -73,6 +74,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
             if(in_array(strtolower(trim($importtype)), ['roles','accounts','mapping'])) {
                 switch (strtolower(trim($importtype))) {
                     case "roles":
+                        echo "Start::".\implode("", $currentBlock)."::Stop\n";
                         $resp = $this->importRole(\json_decode(\implode("\n", $currentBlock),true));
                         if($resp->isSuccess()) {
                             $this->removeHrefFromTracking($resp->getData()['role_data']['href']);
