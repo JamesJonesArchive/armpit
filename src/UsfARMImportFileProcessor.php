@@ -104,6 +104,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi {
             }
         } elseif($importtype == "roles") {
             foreach($this->getTrackingHrefList()->getData()['hrefs'] as $href) {
+                echo "Removing role::".$href."::End Removing Role\n";
                 $resp = $this->removeRole($href);
                 echo $resp->encode()."\n";
                 $this->removeHrefFromTracking($href);
