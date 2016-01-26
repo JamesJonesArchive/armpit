@@ -15,8 +15,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi
      * @param type $importfile
      * @param type $importtype
      */
-    public function parseFileByType($importfile, $importtype, $type = null)
-    {
+    public function parseFileByType($importfile, $importtype, $type = null) {
         $importtype = \strtolower(\trim($importtype));
         $handle = \fopen($importfile, 'r');
         $currentBlock = [];
@@ -45,6 +44,8 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi
             if (\trim($line) === '') {
                 if (!empty($currentBlock)) {
                     if (in_array($importtype, ['roles','accounts','mapping'])) {
+                        // Ensures the Indexes exist on the collections
+                        $this->ensureIndexes();
                         switch ($importtype) {
                             case "roles":
                                 $resp = $this->importRole(\json_decode(\implode("\n", $currentBlock), true));
