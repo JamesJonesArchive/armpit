@@ -27,9 +27,13 @@ class RestoreArmCommand extends Command {
         $this->setName("backup:import")
             ->setDescription("Restores a zipped mongo dump.")
             ->addArgument('fileName',InputArgument::REQUIRED,'What is the accounts filename?')
+            ->addOption('db',null,InputOption::VALUE_REQUIRED,'Provide a specific database name')                                
             ->setHelp("Usage: <info>php console.php import:accounts <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
+        if ($input->getOption('db')) {
+            $this->usfARMImportFileProcessor->setARMdbName($input->getOption('db'));
+        }        
         $filePath = $input->getArgument('fileName');
         $tempfile = \tempnam(\sys_get_temp_dir(), '');
         if (file_exists($tempfile)) { unlink($tempfile); }

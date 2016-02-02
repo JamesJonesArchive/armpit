@@ -30,9 +30,13 @@ class ReviewCommand extends Command {
             ->addOption('type',null,InputOption::VALUE_REQUIRED,'Provide the system type')
             ->addOption('usfid',null,InputOption::VALUE_REQUIRED,'Provide the usfid')
             ->addOption('identifier',null,InputOption::VALUE_REQUIRED,'Provide the identifier')
+            ->addOption('db',null,InputOption::VALUE_REQUIRED,'Provide a specific database name')                                
             ->setHelp("Usage: <info>php console.php review:accounts <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {        
+        if ($input->getOption('db')) {
+            $this->usfARMImportFileProcessor->setARMdbName($input->getOption('db'));
+        }        
         if(!\is_null($input->getOption('type')) && !\is_null($input->getOption('usfid'))) {
             $resp = $this->usfARMImportFileProcessor->getAccountsByTypeAndIdentity($input->getOption('type'),$input->getOption('usfid'));
             if($resp->isSuccess()) {

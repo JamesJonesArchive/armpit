@@ -28,9 +28,13 @@ class DeleteRoleCommand extends Command {
         $this->setName("delete:role")
             ->setDescription("Removes a role with the given href")
             ->addArgument('href',InputArgument::REQUIRED,'What is the role href?')
+            ->addOption('db',null,InputOption::VALUE_REQUIRED,'Provide a specific database name')                
             ->setHelp("Usage: <info>php console.php delete:role <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
+        if ($input->getOption('db')) {
+            $this->usfARMImportFileProcessor->setARMdbName($input->getOption('db'));
+        }        
         $href = $input->getArgument('href');
         $output->writeln($this->usfARMImportFileProcessor->removeRole($href)->encode());
     }

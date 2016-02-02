@@ -26,9 +26,13 @@ class DumpArmCommand extends Command {
         $this->setName("backup:export")
             ->setDescription("Exports ARM mongo data to zipped dump")
             ->addOption('out',null,InputOption::VALUE_REQUIRED,'What is the folder used for output?',false)
+            ->addOption('db',null,InputOption::VALUE_REQUIRED,'Provide a specific database name')                
             ->setHelp("Usage: <info>php console.php backup:export <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
+        if ($input->getOption('db')) {
+            $this->usfARMImportFileProcessor->setARMdbName($input->getOption('db'));
+        }        
         $tempfile = \tempnam(\sys_get_temp_dir(), '');
         if (file_exists($tempfile)) { unlink($tempfile); }
         mkdir($tempfile);

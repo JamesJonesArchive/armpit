@@ -28,10 +28,14 @@ class ImportAccountRolesCommand extends Command {
         $this->setName("import:mapping")
             ->setDescription("Imports account roles from line feed separated json account objects.")
             ->addArgument('fileName',InputArgument::OPTIONAL,'What is the accounts filename?')
+            ->addOption('db',null,InputOption::VALUE_REQUIRED,'Provide a specific database name')                
             ->addOption('in',null,InputOption::VALUE_NONE,'Provide STDIN')
             ->setHelp("Usage: <info>php console.php import:accounts <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
+        if ($input->getOption('db')) {
+            $this->usfARMImportFileProcessor->setARMdbName($input->getOption('db'));
+        }
         if($filePath = $input->getArgument('fileName')) {
             if (\file_exists($filePath)) {
                 $output->writeln("Importing account roles: Started at ".date("F j, Y, g:i a"));

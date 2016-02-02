@@ -30,9 +30,13 @@ class ImportRolesCommand extends Command {
             ->addArgument('fileName',InputArgument::OPTIONAL,'What is the roles filename?')
             ->addOption('type',null,InputOption::VALUE_REQUIRED,'Provide the system type')
             ->addOption('in',null,InputOption::VALUE_NONE,'Provide STDIN')
+            ->addOption('db',null,InputOption::VALUE_REQUIRED,'Provide a specific database name')                
             ->setHelp("Usage: <info>php console.php import:roles <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
+        if ($input->getOption('db')) {
+            $this->usfARMImportFileProcessor->setARMdbName($input->getOption('db'));
+        }        
         if($filePath = $input->getArgument('fileName')) {
             if (\file_exists($filePath)) {
                 $output->writeln("Importing roles from ".$input->getOption('type').": Started at ".date("F j, Y, g:i a"));

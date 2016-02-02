@@ -29,10 +29,14 @@ class ImportAccountsCommand extends Command {
             ->setDescription("Imports accounts from line feed separated json account objects.")
             ->addArgument('fileName',InputArgument::OPTIONAL,'What is the accounts filename?')
             ->addOption('type',null,InputOption::VALUE_REQUIRED,'Provide the system type')
+            ->addOption('db',null,InputOption::VALUE_REQUIRED,'Provide a specific database name')                
             ->addOption('in',null,InputOption::VALUE_NONE,'Provide STDIN')
             ->setHelp("Usage: <info>php console.php import:accounts <env></info>");
     }
     protected function execute(InputInterface $input, OutputInterface $output) {
+        if ($input->getOption('db')) {
+            $this->usfARMImportFileProcessor->setARMdbName($input->getOption('db'));
+        }
         if($filePath = $input->getArgument('fileName')) {
             if (\file_exists($filePath)) {
                 $output->writeln("Importing accounts from ".$input->getOption('type').": Started at ".date("F j, Y, g:i a"));
