@@ -37,7 +37,7 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi
             echo "Mapping comparison complete. ". \PHP_Timer::secondsToTimeString($time)."\n";
         }
 
-        $roles = $accounts = $mapping = 0;
+        $roles = $accounts = $mapping = $accounts_removed = $roles_removed = 0;
 
         while (!feof($handle)) {
             $line = fgets($handle);
@@ -127,6 +127,33 @@ class UsfARMImportFileProcessor extends \USF\IdM\UsfARMapi
         if ($roles > 0) echo "Imported $roles roles.\n";
         if ($accounts > 0) echo "Imported $accounts accounts.\n";
         if ($mapping > 0) echo "Imported $mapping account<=>role mappings.\n";
+        if($importtype == 'accounts') {
+            foreach ($this->current_accounts as $atype => $hrefs) {
+                foreach ($hrefs as $href) {
+                    $resp = $this->removeAccount($href);
+                    if (! $resp->isSuccess()) {
+                        echo $resp->encode()."\n";
+                    } else {
+                        $accounts_removed++;
+                        if (($accounts_removed % 1000) === 0) echo "$accounts_removed \n";
+                    }                    
+                }
+            }
+            if ($accounts_removed > 0) echo "Removed $accounts_removed accounts missing from feed.\n";
+        } elseif($importtype == "roles") {
+            foreach ($this->current_roles as $rtype => $hrefs) {
+                foreach ($hrefs as $href) {
+                    $resp = $this->removeRole($href);
+                    if (! $resp->isSuccess()) {
+                        echo $resp->encode()."\n";
+                    } else {
+                        $roles_removed++;
+                        if (($roles_removed % 1000) === 0) echo "$roles_removed \n";
+                    }                    
+                }
+            }
+            if ($roles_removed > 0) echo "Removed $roles_removed roles missing from feed.\n";
+        }        
         $time = \PHP_Timer::stop();
         echo \PHP_Timer::resourceUsage()."\n";
     }
