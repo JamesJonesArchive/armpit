@@ -97,7 +97,6 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask('buildrpm', [
-        "build",
         "copy:pharrename",
         "clean:pharrename",
         "chmod:pharbits",
