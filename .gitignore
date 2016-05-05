@@ -13,3 +13,4 @@ composer.lock
 /dump/
 arm_backup.zip
 /bin/
+/node_modules/
