@@ -14,3 +14,4 @@ composer.lock
 arm_backup.zip
 /bin/
 /node_modules/
+/deploy/

@@ -64,6 +64,9 @@ module.exports = function (grunt) {
             buildcmd: {
                 command: './build.sh'
             },
+            mkdeploy: {
+                command: 'mkdir -p deploy'
+            },
             fpmrpm: {
                 "command": [
                     [
@@ -101,6 +104,7 @@ module.exports = function (grunt) {
         "clean:pharrename",
         "chmod:pharbits",
         "clean:deploy",
+        "shell:mkdeploy",
         "shell:fpmrpm"
     ]);
 
