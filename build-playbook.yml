@@ -31,6 +31,18 @@
       service: name=mongod enabled=yes state=started
     - name: Ensure php-pecl-mongo is installed
       yum: name=php-pecl-mongo state=latest
+    - name: Ensure ruby is installed
+      yum: name=ruby state=latest
+    - name: Ensure rubygems is installed
+      yum: name=rubygems state=latest
+    - name: Ensure the fpm gem installed
+      command: gem install fpm
+    - name: Install Composer
+      shell: curl -sS https://getcomposer.org/installer | php
+      args:
+        chdir: /usr/local/bin
+    - name: Rename Composer
+      command: mv /usr/local/bin/composer.phar /usr/local/bin/composer
 
 # - name: install nginx rpm from a local file
 #   yum: name=/usr/local/src/nginx-release-centos-6-0.el6.ngx.noarch.rpm state=present
