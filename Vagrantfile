@@ -40,6 +40,33 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define :armpitvm do |armpitvm|
   end
 
+  #Disable the default share
+  #  config.vm.synced_folder ".", "/vagrant", disabled: true
+  #
+  #  #Share ~/vagrant_shares/arm on the host to /opt/site on the guest
+  #  #See: https://github.com/gael-ian/vagrant-bindfs
+  #  if Vagrant.has_plugin?("vagrant-bindfs")
+  #    config.vm.synced_folder "~/vagrant_shares/armpit", "/opt_share_nfs", create: true, :nfs => { :mount_options => ['rw', 'vers=3', 'tcp', 'nolock'] }
+  #    config.bindfs.bind_folder "/opt_share_nfs", "/opt/site", :owner => "1000", :group => "1000", :'create-as-user' => true, :perms => "u=rwx:g=rwx:o=rwx", :'create-with-perms' => "u=rwx:g=rwx:o=rwx", :'chown-ignore' => true, :'chgrp-ignore' => true, :'chmod-ignore' => true
+  #  end
+
+  config.vm.provision :ansible do |ansible|
+    ansible.playbook = "build-playbook.yml"
+    ansible.groups = {
+      "armpit" => ["armpitvm"]
+    }
+    ansible.sudo = true
+    # ansible.extra_vars = {
+    #      vagrant_vm: true,
+    #      force_remote_user: true,
+    #      remote_user: "vagrant",
+    #      ansible_ssh_user: "vagrant",
+    #      arm_web_fqdn: "armpit.vagrant.dev",
+    #      web_server_group: "vagrant",
+    #      web_server_user: "vagrant"
+    # }
+  end
+  
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine. In the example below,
   # accessing "localhost:8080" will access port 80 on the guest machine.

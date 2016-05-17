@@ -16,3 +16,4 @@ arm_backup.zip
 /node_modules/
 /deploy/
 /.vagrant/
+/build-playbook.retry
