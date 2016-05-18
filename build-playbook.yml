@@ -33,6 +33,8 @@
       yum: name=php-pecl-mongo state=latest
     - name: Ensure ruby is installed
       yum: name=ruby state=latest
+    - name: Ensure ruby-devel is installed
+      yum: name=ruby-devel state=latest
     - name: Ensure rubygems is installed
       yum: name=rubygems state=latest
     - name: Ensure the fpm gem installed
@@ -43,6 +45,12 @@
         chdir: /usr/local/bin
     - name: Rename Composer
       command: mv /usr/local/bin/composer.phar /usr/local/bin/composer
+    - name: Build project with npm as vagrant user
+      shell: npm install
+      become: yes
+      become_user: vagrant
+      args:
+        chdir: /vagrant
 
 # - name: install nginx rpm from a local file
 #   yum: name=/usr/local/src/nginx-release-centos-6-0.el6.ngx.noarch.rpm state=present
