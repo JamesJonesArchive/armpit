@@ -15,6 +15,8 @@
       yum: name=nodejs state=latest
     - name: Ensure npm is installed
       yum: name=npm state=latest
+    - name: Ensure git is installed
+      yum: name=git state=latest
     - name: Ensure php is installed
       yum: name=php state=latest
     - name: Ensure php-mysql is installed
@@ -37,26 +39,33 @@
       yum: name=ruby-devel state=latest
     - name: Ensure rubygems is installed
       yum: name=rubygems state=latest
+    - name: Ensure rpm-build is installed
+      yum: name=rpm-build state=latest
     - name: Ensure the fpm gem installed
       command: gem install fpm
-    - name: Install Composer
-      shell: curl -sS https://getcomposer.org/installer | php
+    - name: Install composer
+      shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
       args:
-        chdir: /usr/local/bin
-    - name: Rename Composer
-      command: mv /usr/local/bin/composer.phar /usr/local/bin/composer
+        creates: /usr/local/bin/composer        
+    - name: PHP phar.readonly turned Off
+      ini_file: dest=/etc/php.ini section=Phar option=phar.readonly value=Off
     - name: Setup github global oauth
-      shell: composer config --global github-oauth.github.com 21d15230831d25729516a7efe93119458404fc51
+      shell: "composer config --global github-oauth.github.com {{ githubOauth }}"
       become: yes
-      become_user: vagrant
-      args:
-        chdir: /vagrant
+      become_user: "{{ remote_user }}"      
     - name: Build project with npm as vagrant user
       shell: npm install
       become: yes
-      become_user: vagrant
+      become_user: "{{ remote_user }}"
       args:
         chdir: /vagrant
-
-# - name: install nginx rpm from a local file
-#   yum: name=/usr/local/src/nginx-release-centos-6-0.el6.ngx.noarch.rpm state=present
+    - name: Have Grunt run fpm and build an RPM file
+      shell: node_modules/grunt-cli/bin/grunt buildrpm
+      become: yes
+      become_user: "{{ remote_user }}"
+      args:
+        chdir: /vagrant
+    - name: install armpit rpm from a local file
+      yum: name={{ item }} state=present
+      with_fileglob:
+        - /vagrant/deploy/*.rpm

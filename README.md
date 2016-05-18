@@ -77,3 +77,11 @@ Set a review on an account by a system type and identifier
 ```
 armpit.phar review:accounts --type <type> --identifier <identifier>
 ```
+
+## Having Vagrant create your build and install it
+
+You'll need to pass your github-oauth key as an enviroment varable to vagrant LIKE
+
+```
+GITHUB_OAUTH='b4cc344d25a2efe540adbf2678e2304c' vagrant up --provider virtualbox
+```

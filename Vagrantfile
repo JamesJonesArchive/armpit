@@ -56,7 +56,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "armpit" => ["armpitvm"]
     }
     ansible.sudo = true
-    # ansible.extra_vars = {
+    ansible.extra_vars = {
+      githubOauth: ENV['GITHUB_OAUTH'],
+      remote_user: "vagrant"
     #      vagrant_vm: true,
     #      force_remote_user: true,
     #      remote_user: "vagrant",
@@ -64,7 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #      arm_web_fqdn: "armpit.vagrant.dev",
     #      web_server_group: "vagrant",
     #      web_server_user: "vagrant"
-    # }
+    }
   end
   
   # Create a forwarded port mapping which allows access to a specific port
