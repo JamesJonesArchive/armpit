@@ -45,6 +45,12 @@
         chdir: /usr/local/bin
     - name: Rename Composer
       command: mv /usr/local/bin/composer.phar /usr/local/bin/composer
+    - name: Setup github global oauth
+      shell: composer config --global github-oauth.github.com 21d15230831d25729516a7efe93119458404fc51
+      become: yes
+      become_user: vagrant
+      args:
+        chdir: /vagrant
     - name: Build project with npm as vagrant user
       shell: npm install
       become: yes
