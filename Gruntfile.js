@@ -54,7 +54,6 @@ module.exports = function (grunt) {
                         '/usr/local/bin/fpm -s dir -t rpm -n \'<%= appEnv.name %>\' -v <%= appEnv.version %> ',
                         '"php"',
                         '"php-common"',
-                        '"php-mysqlnd"',
                         '"php-pdo"',
                         '"php-devel"',
                         '"php-pear"',
@@ -65,7 +64,6 @@ module.exports = function (grunt) {
                         '"php-xml"',
                         '"php-cli"',
                         '"php-pecl-mongo"',
-                        '"mongo-tools"',
                         '"mongodb"',
                         '"mongodb-server"',
                         '"libmongodb"'

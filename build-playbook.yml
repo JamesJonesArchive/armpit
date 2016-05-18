@@ -23,12 +23,12 @@
       yum: name=php-mysql state=latest
     - name: Ensure php-fpm is installed
       yum: name=php-fpm state=latest
-    - name: Add Mongodb repository
-      copy: content="{{ mongodbrepodef }}" dest=/etc/yum.repos.d/mongodb.repo
-    - name: Ensure mongodb-org is installed
-      yum: name=mongodb-org state=latest
-    - name: Ensure mongodb-org-server is installed
-      yum: name=mongodb-org-server state=latest
+#    - name: Add Mongodb repository
+#      copy: content="{{ mongodbrepodef }}" dest=/etc/yum.repos.d/mongodb.repo
+    - name: Ensure mongodb is installed
+      yum: name=mongodb state=latest
+    - name: Ensure mongodb-server is installed
+      yum: name=mongodb-server state=latest
     - name: Ensure mongod is enabled and started
       service: name=mongod enabled=yes state=started
     - name: Ensure php-pecl-mongo is installed
@@ -68,4 +68,4 @@
     - name: install armpit rpm from a local file
       yum: name={{ item }} state=present
       with_fileglob:
-        - /vagrant/deploy/*.rpm
+        - deploy/*.rpm
