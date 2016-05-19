@@ -65,7 +65,17 @@
       become_user: "{{ remote_user }}"
       args:
         chdir: /vagrant
-    - name: install armpit rpm from a local file
-      yum: name={{ item }} state=present
+    - name: copy RPM to tmp
+      copy: 
+        src: "{{ item }}"
+        dest: /tmp
       with_fileglob:
-        - /vagrant/deploy/*.rpm
+        - deploy/*.rpm
+    - name: install armpit rpm from a local file
+      yum: 
+        name: "{{ item }}" 
+        state: present
+      args:
+        chdir: /tmp
+      with_fileglob:
+        - /tmp/*.rpm
