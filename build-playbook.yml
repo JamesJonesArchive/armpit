@@ -9,6 +9,23 @@
       gpgcheck=0
       enabled=1
   tasks:
+    - name: Remove PHP 5.4
+      yum:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - php
+        - php-mysql
+        - php-fpm
+        - php-pecl-mongo
+    - name: Add the Remi PHP Repo
+      yum: 
+        name: http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+        state: present
+    - name: Enable the Remi Base Repo
+      ini_file: dest=/etc/yum.repos.d/remi.repo section=remi option=enabled value=1
+    - name: Enable the Remi PHP 5.6 Repo
+      ini_file: dest=/etc/yum.repos.d/remi.repo section=remi-php56 option=enabled value=1
     - name: Install basic build packages
       yum: 
         name: "{{ item }}"
@@ -54,13 +71,9 @@
         dest: /tmp
       with_fileglob:
         - deploy/*.rpm
+      register: copiedrpms
+    - debug: var=copiedrpms.results[0].dest
     - name: install armpit rpm from a local file
       yum: 
-        name: "{{ item }}" 
+        name: "{{ copiedrpms.results[0].dest }}" 
         state: present
-      args:
-        chdir: /tmp
-      with_fileglob:
-        - /tmp/*.rpm
-      register: result
-    - debug: var=result
