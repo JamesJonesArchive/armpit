@@ -1,7 +1,10 @@
 {
     "name": "armpit",
     "version": "1.0.2",
+    "release": "2",
     "description": "A command line interface using the armapi to handle batch processing outside the arm web application",
+    "homepage": "https://github.com/USF-IT/armpit",
+    "license": "Apache-2.0",
     "dependencies": {},
     "private": true,
     "devDependencies": {
