@@ -9,38 +9,42 @@
       gpgcheck=0
       enabled=1
   tasks:
-    - name: Ensure EPEL is installed
-      yum: name=epel-release state=latest
-    - name: Ensure nodejs is installed
-      yum: name=nodejs state=latest
-    - name: Ensure npm is installed
-      yum: name=npm state=latest
-    - name: Ensure git is installed
-      yum: name=git state=latest
-    - name: Ensure php is installed
-      yum: name=php state=latest
-    - name: Ensure php-mysql is installed
-      yum: name=php-mysql state=latest
-    - name: Ensure php-fpm is installed
-      yum: name=php-fpm state=latest
-#    - name: Add Mongodb repository
-#      copy: content="{{ mongodbrepodef }}" dest=/etc/yum.repos.d/mongodb.repo
-    - name: Ensure mongodb is installed
-      yum: name=mongodb state=latest
-    - name: Ensure mongodb-server is installed
-      yum: name=mongodb-server state=latest
-    - name: Ensure mongod is enabled and started
-      service: name=mongod enabled=yes state=started
-    - name: Ensure php-pecl-mongo is installed
-      yum: name=php-pecl-mongo state=latest
-    - name: Ensure ruby is installed
-      yum: name=ruby state=latest
-    - name: Ensure ruby-devel is installed
-      yum: name=ruby-devel state=latest
-    - name: Ensure rubygems is installed
-      yum: name=rubygems state=latest
-    - name: Ensure rpm-build is installed
-      yum: name=rpm-build state=latest
+    - name: Remove PHP 5.4
+      yum:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - php
+        - php-mysql
+        - php-fpm
+        - php-pecl-mongo
+    - name: Add the Remi PHP Repo
+      yum: 
+        name: http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+        state: present
+    - name: Enable the Remi Base Repo
+      ini_file: dest=/etc/yum.repos.d/remi.repo section=remi option=enabled value=1
+    - name: Enable the Remi PHP 5.6 Repo
+      ini_file: dest=/etc/yum.repos.d/remi.repo section=remi-php56 option=enabled value=1
+    - name: Install basic build packages
+      yum: 
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - epel-release
+        - nodejs
+        - npm
+        - git
+        - php
+        - php-mysql
+        - php-fpm
+        - mongodb
+        - mongodb-server
+        - php-pecl-mongo
+        - ruby
+        - ruby-devel
+        - rubygems
+        - rpm-build
     - name: Ensure the fpm gem installed
       command: gem install fpm
     - name: Install composer
@@ -49,23 +53,27 @@
         creates: /usr/local/bin/composer        
     - name: PHP phar.readonly turned Off
       ini_file: dest=/etc/php.ini section=Phar option=phar.readonly value=Off
-    - name: Setup github global oauth
-      shell: "composer config --global github-oauth.github.com {{ githubOauth }}"
+    - name: Build the package
+      shell: "{{ item }}"
       become: yes
-      become_user: "{{ remote_user }}"      
-    - name: Build project with npm as vagrant user
-      shell: npm install
-      become: yes
-      become_user: "{{ remote_user }}"
+      become_user: "{{ remote_user }}"   
       args:
         chdir: /vagrant
-    - name: Have Grunt run fpm and build an RPM file
-      shell: node_modules/grunt-cli/bin/grunt buildrpm
-      become: yes
-      become_user: "{{ remote_user }}"
-      args:
-        chdir: /vagrant
-    - name: install armpit rpm from a local file
-      yum: name={{ item }} state=present
+      with_items:
+        - "composer config --global github-oauth.github.com {{ githubOauth }}"
+        - npm install
+        - node_modules/grunt-cli/bin/grunt buildrpm
+      register: fpmresult
+    - debug: var=fpmresult
+    - name: copy RPM to tmp
+      copy: 
+        src: "{{ item }}"
+        dest: /tmp
       with_fileglob:
-        - /vagrant/deploy/*.rpm
+        - deploy/*.rpm
+      register: copiedrpms
+    - debug: var=copiedrpms.results[0].dest
+    - name: install armpit rpm from a local file
+      yum: 
+        name: "{{ copiedrpms.results[0].dest }}" 
+        state: present
