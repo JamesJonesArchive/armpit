@@ -53,6 +53,18 @@
         creates: /usr/local/bin/composer        
     - name: PHP phar.readonly turned Off
       ini_file: dest=/etc/php.ini section=Phar option=phar.readonly value=Off
+    - name: Copy over Oracle Instant Client
+      copy: 
+        src: "{{ item }}"
+        dest: "/tmp"
+      with_fileglob:
+        - ../infrastructure/identity_management/ansible/roles/oracle_client/files/oracle-instantclient*.rpm
+      register: instantclientrpms
+    - name: Install Oracle InstantClient
+      yum: 
+        name: "{{ item.dest }}"
+        state: present
+      with_items: "{{ instantclientrpms.results }}"        
     - name: Build the package
       shell: "{{ item }}"
       become: yes

@@ -52,6 +52,29 @@ module.exports = function (grunt) {
             mkdeploy: {
                 command: 'mkdir -p deploy'
             },
+            fpmcentos7: {
+                "command": [
+                    [
+                        '/usr/local/bin/fpm -s dir -t rpm -n \'<%= appEnv.name %>\' -v <%= appEnv.version %> ',
+                        '"php56w"',
+                        '"php56w-common"',
+                        '"php56w-pdo"',
+                        '"php56w-devel"',
+                        '"php56w-pear"',
+                        '"php56w-gd"',
+                        '"php56w-mcrypt"',
+                        '"php56w-xml"',
+                        '"php56w-mbstring"',
+                        '"php56w-xml"',
+                        '"php56w-cli"',
+                        '"mongodb-org-server"',
+                        '"mongodb-org-shell"',
+                        '"mongodb-org-mongos"',
+                        '"mongodb-org-tools"'
+                    ].join(' -d '),
+                    '--after-install app/setupconfig.sh -p deploy ./bin/armpit.phar=/usr/local/bin/armpit'
+                ].join(' ')
+            },
             fpmrpm: {
                 "command": [
                     [
