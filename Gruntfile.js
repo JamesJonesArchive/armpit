@@ -72,6 +72,11 @@ module.exports = function (grunt) {
                         '"mongodb-org-mongos"',
                         '"mongodb-org-tools"'
                     ].join(' -d '),
+                    '--description "<%= appEnv.description %>"',
+                    '--url "<%= appEnv.homepage %>"',
+                    '--license "<%= appEnv.license %>"',
+                    '--vendor "University of South Florida"',
+                    '--iteration "<%= appEnv.release %>.el7"',
                     '--after-install app/setupconfig.sh -p deploy ./bin/armpit.phar=/usr/local/bin/armpit'
                 ].join(' ')
             },
